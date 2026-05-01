@@ -36,18 +36,23 @@ class Invoice(TenantModel):
 class Payment(TenantModel):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    payment_method = models.CharField(max_length=50) # e.g., 'Bank Transfer', 'Mobile Money'
+    payment_method = models.CharField(max_length=50)  # e.g., 'Bank Transfer', 'Mobile Money'
     reference = models.CharField(max_length=100, unique=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        is_new = self.pk is None
+        is_new = self._state.adding
         super().save(*args, **kwargs)
         if is_new:
-            # Update the related invoice paid amount
-            self.invoice.paid_amount += self.amount
+            # Atomic DB-level update to prevent race conditions
+            Invoice.objects.filter(pk=self.invoice_id).update(
+                paid_amount=models.F('paid_amount') + self.amount,
+            )
+            # Reload the invoice to get the updated paid_amount
+            self.invoice.refresh_from_db()
+            # Now set the status based on the real DB value
             if self.invoice.paid_amount >= self.invoice.total_amount:
                 self.invoice.status = 'paid'
             elif self.invoice.paid_amount > 0:
                 self.invoice.status = 'partially_paid'
-            self.invoice.save(update_fields=['paid_amount', 'status'])
+            self.invoice.save(update_fields=['status'])
