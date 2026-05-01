@@ -1,0 +1,24 @@
+databases:
+  - name: unisaas-db
+    plan: free
+    databaseName: unisaas
+    user: unisaas
+
+services:
+  - type: web
+    name: unisaas-enterprise
+    plan: free
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn unisaas.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: unisaas-db
+          property: connectionURI
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

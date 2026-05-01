@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import environ
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False)
 )
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env_path = os.path.join(BASE_DIR, '.env')
+if os.path.isfile(env_path):
+    environ.Env.read_env(env_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,6 +36,9 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-sj_fsztm#+-famkh%df4-z3-
 DEBUG = env('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -65,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'tenants.middleware.TenantMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -99,7 +106,10 @@ WSGI_APPLICATION = 'unisaas.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db('DATABASE_URL', default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 
@@ -139,6 +149,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (user uploads, generated PDFs)
 MEDIA_URL = '/media/'
@@ -147,13 +158,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# SECURE ENTERPRISE SETTINGS
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-CSP_DEFAULT_SRC = ("'self'",)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURITY — only enforce HTTPS cookies in production
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
 
 AUTH_USER_MODEL = 'accounts.User'
 
