@@ -9,6 +9,7 @@ from students.services import MatriculeService
 from finance.models import Invoice
 from .services import AdmissionDocumentService
 from datetime import date
+from django.core.files.base import ContentFile
 
 User = get_user_model()
 
@@ -64,9 +65,14 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             application.status = 'accepted'
             application.save()
 
-            # 6. Generate PDF Offer Letter (Simulated in buffer for now)
-            # In production, we'd save this to a FileField
-            AdmissionDocumentService.generate_offer_letter(application)
+            # 6. Generate and Persist PDF Offer Letter
+            pdf_buffer = AdmissionDocumentService.generate_offer_letter(application)
+            application.offer_letter.save(
+                f"Offer_Letter_{application.id}.pdf",
+                ContentFile(pdf_buffer.read()),
+                save=False
+            )
+            application.save()
 
         return Response({
             "message": "Student admitted successfully",
