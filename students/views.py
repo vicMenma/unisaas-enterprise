@@ -6,7 +6,7 @@ from .serializers import StudentProfileSerializer
 from .services import MatriculeService
 from .tasks import send_welcome_email_task
 from accounts.permissions import IsRegistrationStaff
-from ratelimit.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 from unisaas.logging import EnterpriseLogger
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
