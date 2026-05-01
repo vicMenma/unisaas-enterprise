@@ -15,9 +15,11 @@ class MatriculeService:
         if not pattern_config:
             # Fallback if university hasn't configured a pattern
             pattern_config = {
-                'format': '{prefix}-{program}-{level}-{sequence}',
+                'format': '{prefix}-{year}-{program}-{level}-{sequence}',
                 'sequence_length': 4
             }
+
+        prefix = university.matricule_prefix or university.slug.upper()
 
         with transaction.atomic():
             # Atomically lock the sequence row for this specific cohort
@@ -38,8 +40,8 @@ class MatriculeService:
             formatted_sequence = str(seq.current_sequence).zfill(seq_length)
 
             # Generate the final string
-            matricule = pattern_config.get('format', '{prefix}-{sequence}').format(
-                prefix=university.matricule_prefix,
+            matricule = pattern_config.get('format', '{prefix}-{year}-{sequence}').format(
+                prefix=prefix,
                 program=program_code,
                 level=level,
                 year=entry_year,
