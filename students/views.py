@@ -1,10 +1,13 @@
 from django.db import transaction
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 from .models import StudentProfile
 from .serializers import StudentProfileSerializer
 from .services import MatriculeService
 from .tasks import send_welcome_email_task
 from accounts.permissions import IsRegistrationStaff
+from ratelimit.decorators import ratelimit
+from unisaas.logging import EnterpriseLogger
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
     serializer_class = StudentProfileSerializer
@@ -24,6 +27,12 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
         
         matricule = MatriculeService.generate_matricule(university, entry_year, program_id, current_level)
         student = serializer.save(university=university, matricule=matricule)
+        
+        # Enterprise Audit Log
+        EnterpriseLogger.log_action(
+            self.request, "Student Created", "StudentProfile", student.id,
+            new_state=serializer.data
+        )
         
         # Trigger async welcome email
         transaction.on_commit(lambda: send_welcome_email_task.delay(student.user.id))

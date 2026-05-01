@@ -21,7 +21,7 @@ from students.views import StudentProfileViewSet
 from registration.views import EnrollmentViewSet
 from examinations.views import GradeViewSet
 from finance.views import FeeCategoryViewSet, InvoiceViewSet, PaymentViewSet
-from .views import home_view, static_view, portal_view, portal_static_view
+from .views import home_view, static_view, portal_view, portal_static_view, dean_portal_view
 
 router = DefaultRouter()
 router.register(r'students', StudentProfileViewSet, basename='student')
@@ -36,6 +36,7 @@ urlpatterns = [
     path('style.css', static_view, name='static_css'),
     path('portal', portal_view, name='portal'),
     path('portal.css', portal_static_view, name='portal_css'),
+    path('dean-portal', dean_portal_view, name='dean_portal'),
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include(router.urls)),

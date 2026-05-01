@@ -37,3 +37,12 @@ def portal_static_view(request):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
     return HttpResponse(content, content_type='text/css')
+
+def dean_portal_view(request):
+    """
+    Serves the executive dean portal page.
+    """
+    file_path = os.path.join(settings.BASE_DIR, 'frontend', 'dean_portal.html')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    return HttpResponse(content)

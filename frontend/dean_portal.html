@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dean's Strategic Dashboard | UniSaaS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="portal.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dean-dashboard">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">UniSaaS<span>.</span></div>
+            <nav class="side-nav">
+                <a href="#" class="active">BI Overview</a>
+                <a href="#">Financial Reports</a>
+                <a href="#">Faculty Performance</a>
+                <a href="#">Audit Logs</a>
+            </nav>
+            <div class="user-pill">
+                <div class="avatar">DN</div>
+                <div class="user-info">
+                    <span class="name">Dean Mitchell</span>
+                    <span class="role">Executive Admin</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Strategic <span>Overview</span></h1>
+                <div class="date-range">Q4 2026 Analytics</div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="balance-value">$1.2M</div>
+                    <p>84% Collection Rate</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Enrollment</h3>
+                    <div class="gpa-value">4,850</div>
+                    <p>+15% year-over-year</p>
+                </div>
+                <div class="stat-card">
+                    <h3>App Funnel</h3>
+                    <div class="semester-value">64%</div>
+                    <p>Conversion Rate</p>
+                </div>
+            </div>
+
+            <div class="bi-grid">
+                <div class="chart-container stat-card">
+                    <h3>Financial Performance (Invoiced vs Collected)</h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="audit-container stat-card">
+                    <h3>Live Governance Feed</h3>
+                    <div class="audit-list">
+                        <div class="audit-item">
+                            <span class="time">14:20</span>
+                            <span class="msg">Grade Changed for CU-001</span>
+                            <span class="user">Dr. Smith</span>
+                        </div>
+                        <div class="audit-item">
+                            <span class="time">13:45</span>
+                            <span class="msg">Payment Verified: $2,500</span>
+                            <span class="user">System</span>
+                        </div>
+                        <div class="audit-item">
+                            <span class="time">11:10</span>
+                            <span class="msg">Admission Letter Generated</span>
+                            <span class="user">Receptionist</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Invoiced',
+                    data: [200000, 250000, 300000, 280000, 350000, 400000],
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: '#6366f1',
+                    borderWidth: 2
+                }, {
+                    label: 'Collected',
+                    data: [180000, 210000, 290000, 270000, 310000, 380000],
+                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#f8fafc', font: { family: 'Outfit' } } }
+                },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .bi-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .audit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .audit-item {
+            font-size: 0.85rem;
+            padding: 0.8rem;
+            background: var(--glass);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .audit-item .time { color: var(--primary); font-weight: bold; }
+        .audit-item .user { color: var(--text-muted); }
+    </style>
+</body>
+</html>
