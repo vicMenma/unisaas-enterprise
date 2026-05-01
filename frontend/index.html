@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSaaS | The Future of University Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">UniSaaS<span>.</span></div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="http://127.0.0.1:8000/admin" class="btn-primary">Admin Portal</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="fade-in">The Modular Monolith for <span>Modern Universities.</span></h1>
+            <p class="fade-in-delay">Empower your institution with a high-performance, multi-tenant SaaS platform built on Django 5, Celery, and atomic logic.</p>
+            <div class="hero-btns fade-in-delay">
+                <a href="http://127.0.0.1:8000/admin" class="btn-primary">Launch Dashboard</a>
+                <a href="#features" class="btn-secondary">Explore Features</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card">
+                <img src="../unisaas_landing_hero_1777642500309.png" alt="UniSaaS Dashboard Mockup">
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="section-title">
+            <h2>Engineered for Excellence</h2>
+            <p>A complete suite of tools designed for scalability and security.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon">🏢</div>
+                <h3>Multi-Tenancy</h3>
+                <p>Strict database-level isolation ensuring every university's data is private and secure.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🆔</div>
+                <h3>Atomic Matricules</h3>
+                <p>High-concurrency ID generation engine with zero race conditions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>GPA Engine</h3>
+                <p>Automated grade aggregation and GPA calculation powered by native DB expressions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Async Workflows</h3>
+                <p>Background tasks handled by Celery & Redis for lightning-fast user interactions.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 UniSaaS. Built with Django 5 & Passion.</p>
+    </footer>
+
+    <script>
+        // Simple scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        document.querySelectorAll('.feature-card').forEach((card) => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

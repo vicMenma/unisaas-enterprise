@@ -1,0 +1,11 @@
+venv/
+*.pyc
+__pycache__/
+db.sqlite3
+.env
+static/
+media/
+frontend/unisaas_landing_hero*.png
+frontend/portal_assets*.png
+*.log
+.DS_Store
