@@ -9,7 +9,7 @@ services:
     name: unisaas-enterprise
     plan: free
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "bash ./build.sh"
     startCommand: "gunicorn unisaas.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DATABASE_URL
@@ -21,4 +21,12 @@ services:
       - key: DEBUG
         value: "False"
       - key: PYTHON_VERSION
-        value: "3.11.9"
+        value: "3.12.7"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "unisaas.settings.production"
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: DJANGO_SUPERUSER_CREATE
+        value: "false"

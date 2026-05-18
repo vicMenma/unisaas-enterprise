@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.12'
         
     - name: Install Dependencies
       run: |
@@ -24,6 +24,7 @@ jobs:
         
     - name: Run Tests
       run: |
+        export DJANGO_SETTINGS_MODULE=unisaas.settings.local
         python manage.py test
         
     - name: Security Audit (Bandit)

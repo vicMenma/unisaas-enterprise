@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | UniSaaS Enterprise</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">UniSaaS<span>.</span></div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'portal' %}">Portal</a></li>
+            <li><a href="{% url 'admin:index' %}" class="btn-primary">Admin</a></li>
+        </ul>
+    </nav>
+    <main class="hero login-hero">
+        <section class="login-panel">
+            <h1>University Login</h1>
+            <p>Use the API login endpoint with your tenant slug to access UniSaaS Enterprise.</p>
+            <form>
+                <label>Tenant slug</label>
+                <input type="text" value="demo" readonly>
+                <label>Email</label>
+                <input type="email" placeholder="admin@example.edu">
+                <label>Password</label>
+                <input type="password" placeholder="Password">
+                <button class="btn-primary" type="button">Sign in</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

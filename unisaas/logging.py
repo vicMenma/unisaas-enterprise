@@ -1,5 +1,5 @@
 import logging
-from audit.models import AuditLog
+from apps.audit.models import AuditLog
 
 class EnterpriseLogger:
     @staticmethod

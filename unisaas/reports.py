@@ -1,7 +1,7 @@
 from django.db.models import Sum, Count
-from students.models import StudentProfile
-from finance.models import Invoice, Payment
-from admissions.models import Application
+from apps.students.models import StudentProfile
+from apps.finance.models import Invoice, Payment
+from apps.admissions.models import Application
 
 class UniversityReportService:
     """

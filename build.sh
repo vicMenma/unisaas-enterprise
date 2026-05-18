@@ -1,30 +1,40 @@
 #!/usr/bin/env bash
-# Render build script — runs on every deploy
 set -o errexit
 
+export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-unisaas.settings.production}"
+
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
-python manage.py migrate
+python manage.py migrate --noinput
 
-# Create a default university + superuser if they don't exist
-python manage.py shell -c "
-from tenants.models import University
-from accounts.models import User
+if [ "${SEED_DEMO_DATA:-false}" = "true" ]; then
+  python scripts/seed_demo.py
+fi
 
-uni, created = University.objects.get_or_create(
-    slug='demo',
-    defaults={
-        'name': 'UniSaaS Demo University',
-        'matricule_prefix': 'DEMO',
-    }
+if [ "${DJANGO_SUPERUSER_CREATE:-false}" = "true" ]; then
+  python manage.py shell -c "
+import os
+from apps.tenants.models import University
+from apps.accounts.models import User
+
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL')
+password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+tenant_slug = os.environ.get('DJANGO_SUPERUSER_TENANT', 'system')
+
+if not email or not password:
+    raise SystemExit('DJANGO_SUPERUSER_EMAIL and DJANGO_SUPERUSER_PASSWORD are required when DJANGO_SUPERUSER_CREATE=true')
+
+university, _ = University.objects.get_or_create(
+    slug=tenant_slug,
+    defaults={'name': 'System Administration', 'matricule_prefix': 'SYS'},
 )
-if created:
-    print('Created demo university')
 
-if not User.objects.filter(email='admin@unisaas.com').exists():
-    User.objects.create_superuser(email='admin@unisaas.com', password='UniSaaS2026!')
-    print('Created superuser: admin@unisaas.com / UniSaaS2026!')
+if not User.objects.filter(university=university, email=email.lower()).exists():
+    User.objects.create_superuser(email=email, password=password, university=university)
+    print(f'Created superuser {email}')
 else:
-    print('Superuser already exists')
+    print(f'Superuser {email} already exists')
 "
+fi

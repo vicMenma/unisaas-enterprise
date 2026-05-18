@@ -23,6 +23,8 @@ services:
     environment:
       - DEBUG=True
       - SECRET_KEY=dev_key_only
+      - DJANGO_SETTINGS_MODULE=unisaas.settings.local
+      - ENABLE_DEMO_TENANT=True
       - DATABASE_URL=postgres://postgres:postgres@db:5432/unisaas
       - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
@@ -36,6 +38,7 @@ services:
       - .:/app
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/unisaas
+      - DJANGO_SETTINGS_MODULE=unisaas.settings.local
       - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
       - db
