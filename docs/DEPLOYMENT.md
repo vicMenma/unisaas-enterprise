@@ -16,5 +16,6 @@ Recommended:
 - `CELERY_BROKER_URL`
 - `CELERY_RESULT_BACKEND`
 - `TENANT_PARENT_DOMAINS` for tenant subdomain routing, for example `example.edu`
+- `WHITENOISE_MANIFEST_STRICT=false` to keep template pages available if a static manifest is temporarily stale during a deploy
 
 Render runs `./build.sh`, which installs dependencies, collects static files, runs migrations, optionally seeds demo data, and optionally creates a superuser from environment variables. It does not contain hardcoded production credentials.
