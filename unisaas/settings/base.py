@@ -139,6 +139,7 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 ENABLE_DEMO_TENANT = env.bool("ENABLE_DEMO_TENANT", default=False)
 DEMO_TENANT_SLUG = env("DEMO_TENANT_SLUG", default="demo")
+TENANT_PARENT_DOMAINS = env.list("TENANT_PARENT_DOMAINS", default=[])
 
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")

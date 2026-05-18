@@ -5,7 +5,7 @@ Base path: `/api/v1/`
 Tenant resolution:
 
 - Preferred: `X-Tenant-Slug: demo`
-- Alternative: tenant subdomain, such as `demo.example.com`
+- Alternative: tenant subdomain, such as `demo.example.com`, after setting `TENANT_PARENT_DOMAINS=example.com`
 
 Authentication:
 

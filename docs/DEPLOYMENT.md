@@ -15,5 +15,6 @@ Recommended:
 - `CSRF_TRUSTED_ORIGINS`
 - `CELERY_BROKER_URL`
 - `CELERY_RESULT_BACKEND`
+- `TENANT_PARENT_DOMAINS` for tenant subdomain routing, for example `example.edu`
 
 Render runs `./build.sh`, which installs dependencies, collects static files, runs migrations, optionally seeds demo data, and optionally creates a superuser from environment variables. It does not contain hardcoded production credentials.

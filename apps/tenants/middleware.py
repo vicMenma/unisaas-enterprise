@@ -41,10 +41,23 @@ class TenantMiddleware:
         host = request.get_host().split(":")[0].lower()
         if host == "localhost" or self._is_ip_address(host):
             return None
-        host_parts = host.split(".")
-        if len(host_parts) > 2 and host_parts[0] not in {"www", "api"}:
-            return host_parts[0]
+
+        for parent_domain in self._tenant_parent_domains():
+            if host == parent_domain:
+                return None
+            suffix = f".{parent_domain}"
+            if host.endswith(suffix):
+                subdomain = host[: -len(suffix)].strip(".")
+                if subdomain and subdomain not in {"www", "api"}:
+                    return subdomain.split(".")[0]
         return None
+
+    def _tenant_parent_domains(self):
+        return [
+            domain.strip().lower().lstrip(".")
+            for domain in getattr(settings, "TENANT_PARENT_DOMAINS", [])
+            if domain.strip()
+        ]
 
     def _is_ip_address(self, host):
         try:
